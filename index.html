@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>A Perfect Story - Wedding Gallery</title>
+    <link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Quicksand:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .home-header {
+            text-align: center;
+            padding: 2rem 0;
+        }
+
+        .home-header h1 {
+            font-size: 3.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .heading {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .heading .text {
+            font-size: 1.5rem;
+            color: var(--light-gray);
+            display: block;
+            margin-bottom: 1rem;
+        }
+
+        .wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .offset h2 {
+            font-family: 'Pacifico', cursive;
+            color: var(--primary-pink);
+            font-size: 2rem;
+            margin: 0;
+            opacity: 0;
+            transform: translateY(40px);
+            transition: all 0.5s ease;
+        }
+
+        .offset h2.animate {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .featured-gallery {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1rem;
+            padding: 1rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .featured-item {
+            position: relative;
+            overflow: hidden;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            cursor: pointer;
+            aspect-ratio: 3/4;
+            height: 300px;
+        }
+
+        .featured-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .featured-item:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+        }
+
+        @media (max-width: 768px) {
+            .featured-gallery {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 0.8rem;
+            }
+
+            .featured-item {
+                height: 250px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .featured-gallery {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body class="home-page">
+    <div class="sidebar">
+        <div class="logo"><a href="index.html">A Perfect Story</a></div>
+        <nav>
+            <ul>
+                <li><a href="bride.html">BRIDE</a></li>
+                <li><a href="groom.html">GROOM</a></li>
+                <li><a href="details.html">DETAILS</a></li>
+                <li><a href="bride-and-groom.html">BRIDE & GROOM</a></li>
+                <li><a href="church.html">CHURCH</a></li>
+                <li><a href="events.html">EVENTS</a></li>
+                <li><a href="order.html">ORDER OF PHOTOGRAPHS</a></li>
+            </ul>
+        </nav>
+    </div>
+
+    <main>
+        <div class="home-header">
+            <h1>A Perfect Story</h1>
+            
+            <div class="heading">
+                <span class="text">The union of the Uadias</span>
+    
+                <div class="wrapper">
+                    <div class="offset">
+                        <h2 class="text animate-before">Love</h2>
+                    </div>
+                    <div class="offset">
+                        <h2 class="text animate-before">Family</h2>
+                    </div>
+                    <div class="offset">
+                        <h2 class="text animate-before">Joy</h2>
+                    </div>
+                    <div class="offset">
+                        <h2 class="text animate-before">27th April, 2024</h2>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="featured-gallery" class="featured-gallery gallery">
+            <!-- Photos will be loaded here dynamically -->
+        </div>
+    </main>
+
+    <div id="imageModal" class="modal">
+        <span class="close">&times;</span>
+        <img class="modal-content" id="modalImage">
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Animate heading text one after another
+            const animateTexts = document.querySelectorAll('.animate-before');
+            animateTexts.forEach((text, index) => {
+                setTimeout(() => {
+                    text.classList.remove('animate-before');
+                    text.classList.add('animate');
+                }, index * 1000); // 1 second delay between each animation
+            });
+
+            // Gallery code
+            const gallery = document.querySelector('.gallery');
+            const modal = document.getElementById('imageModal');
+            const modalImg = document.getElementById('modalImage');
+            const closeBtn = document.querySelector('.close');
+
+            // All image paths
+            const imagePaths = {
+                bride: Array.from({length: 114}, (_, i) => `Images/BRIDE/PerfectStory-${i + 1}.jpg`),
+                groom: Array.from({length: 20}, (_, i) => `Images/GROOM/PerfectStory-${i + 115}.jpg`),
+                details: Array.from({length: 20}, (_, i) => `Images/DETAILS/PerfectStory-${i + 135}.jpg`),
+                brideAndGroom: Array.from({length: 20}, (_, i) => `Images/BRIDE & GROOM/PerfectStory-${i + 155}.jpg`),
+                church: Array.from({length: 20}, (_, i) => `Images/CHURCH/PerfectStory-${i + 175}.jpg`),
+                events: Array.from({length: 20}, (_, i) => `Images/EVENT/PerfectStory-${i + 195}.jpg`)
+            };
+
+            // Combine all images into one array
+            const allImages = [].concat(...Object.values(imagePaths));
+
+            // Shuffle array and take first 20 images
+            const shuffledImages = allImages.sort(() => Math.random() - 0.5).slice(0, 20);
+
+            // Create gallery items
+            shuffledImages.forEach(imagePath => {
+                const galleryItem = document.createElement('div');
+                galleryItem.className = 'featured-item fade-in';
+                
+                const img = document.createElement('img');
+                img.src = imagePath;
+                img.alt = 'Wedding Photo';
+                
+                galleryItem.appendChild(img);
+                gallery.appendChild(galleryItem);
+                
+                galleryItem.addEventListener('click', () => {
+                    modal.style.display = 'block';
+                    modalImg.src = imagePath;
+                });
+            });
+
+            closeBtn.addEventListener('click', () => {
+                modal.style.display = 'none';
+            });
+
+            window.addEventListener('click', (e) => {
+                if (e.target === modal) {
+                    modal.style.display = 'none';
+                }
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Details - A Perfect Story</title>
+    <link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Quicksand:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="sidebar">
+        <div class="logo"><a href="index.html">A Perfect Story</a></div>
+        <nav>
+            <ul>
+                <li><a href="bride.html">BRIDE</a></li>
+                <li><a href="groom.html">GROOM</a></li>
+                <li><a href="details.html" class="active">DETAILS</a></li>
+                <li><a href="bride-and-groom.html">BRIDE & GROOM</a></li>
+                <li><a href="church.html">CHURCH</a></li>
+                <li><a href="events.html">EVENTS</a></li>
+                <li><a href="order.html">ORDER OF PHOTOGRAPHS</a></li>
+            </ul>
+        </nav>
+    </div>
+
+    <main>
+        <div class="page-title">
+            <h1>Details</h1>
+        </div>
+        <div class="gallery">
+            <!-- Images will be loaded here dynamically -->
+        </div>
+    </main>
+
+    <div id="imageModal" class="modal">
+        <span class="close">&times;</span>
+        <img class="modal-content" id="modalImage">
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const gallery = document.querySelector('.gallery');
+            const modal = document.getElementById('imageModal');
+            const modalImg = document.getElementById('modalImage');
+            const closeBtn = document.querySelector('.close');
+
+            // Generate paths for details images
+            const images = [];
+            // First sequence: 115-155
+            for (let i = 115; i <= 155; i++) {
+                images.push(`C:/Users/HP/Downloads/WEDDING-20250302T145540Z-001/WEDDING/DETAILS/PerfectStory-${i}.jpg`);
+            }
+            // Second sequence: 35-44
+            for (let i = 35; i <= 44; i++) {
+                images.push(`C:/Users/HP/Downloads/WEDDING-20250302T145540Z-001/WEDDING/DETAILS/PerfectStory-${i}.jpg`);
+            }
+
+            // Add all images to the gallery
+            images.forEach((imagePath, index) => {
+                const galleryItem = document.createElement('div');
+                galleryItem.className = 'gallery-item fade-in';
+                
+                const img = document.createElement('img');
+                img.src = imagePath;
+                img.alt = 'Wedding Details Photo';
+                
+                galleryItem.appendChild(img);
+                gallery.appendChild(galleryItem);
+                
+                galleryItem.addEventListener('click', () => {
+                    modal.style.display = 'block';
+                    modalImg.src = imagePath;
+                });
+            });
+
+            closeBtn.addEventListener('click', () => {
+                modal.style.display = 'none';
+            });
+
+            window.addEventListener('click', (e) => {
+                if (e.target === modal) {
+                    modal.style.display = 'none';
+                }
+            });
+        });
+    </script>
+</body>
+</html>
